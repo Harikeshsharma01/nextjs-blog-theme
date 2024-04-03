@@ -1,0 +1,775 @@
+Create an android app to Connect to the Inernet and Display the Connection status.
+Java code:
+package com.example.netcheck;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.graphics.Color;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView internetStatus;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        internetStatus = (TextView) findViewById(R.id.internet_status);
+
+        // At activity startup we manually check the internet status and change
+        // the text status
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null &amp;&amp; networkInfo.isConnected()) {
+            changeTextStatus(true);
+        } else {
+            changeTextStatus(false);
+        }
+    }
+
+    public void changeTextStatus(boolean isConnected) {
+        // Change status according to boolean value
+        if (isConnected) {
+            internetStatus.setText("Internet Connected.");
+            internetStatus.setTextColor(Color.parseColor("#00ff00"));
+        } else {
+            internetStatus.setText("Internet Disconnected.");
+            internetStatus.setTextColor(Color.parseColor("#ff0000"));
+        }
+    }
+}
+
+XML code:-
+
+<relativelayout android:layout_height="match_parent" android:layout_width="match_parent" tools:context="com.example.netcheck.MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+    <textview android:gravity="center" android:id="@+id/internet_status" android:layout_height="wrap_content" android:layout_width="wrap_content" android:textsize="20sp" android:textstyle="bold">
+</textview></relativelayout>
+
+
+
+
+Create an android app to show Notification on the Click of the button
+xml code:-
+
+<relativelayout android:layout_height="match_parent" android:layout_width="match_parent" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <button android:id="@+id/notificationButton" android:layout_centerinparent="true" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Show Notification">
+
+</button></relativelayout>
+
+java code:-
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String CHANNEL_ID = "MyChannelID";
+    private static final int NOTIFICATION_ID = 123;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button notificationButton = findViewById(R.id.notificationButton);
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNotification();
+            }
+        });
+
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showNotification() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("My Notification")
+                .setContentText("This is a notification created by the app.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+}
+
+
+
+
+
+
+
+Create an android Calculator app with Interactice User Interface using appropriate Layouts
+xml code:-
+
+<relativelayout android:layout_height="wrap_content" android:layout_width="match_parent" tools:context="com.example.mycalculator.MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+    <textview android:id="@+id/txtDisplay" android:layout_height="90dp" android:layout_margintop="110dp" android:layout_width="match_parent" android:maxlength="15" android:paddingleft="10sp" android:textappearance="@android:style/TextAppearance.DeviceDefault.Large" android:textsize="40sp">
+
+    <linearlayout android:layout_alignparentleft="true" android:layout_alignparentstart="true" android:layout_below="@+id/txtDisplay" android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="vertical">
+
+        <linearlayout android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+
+            <button android:id="@+id/btnSeven" android:layout_height="90dp" android:layout_marginleft="25dp" android:layout_width="90dp" android:text="7" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnEight" android:layout_height="90dp" android:layout_width="90dp" android:text="8" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnNine" android:layout_height="90dp" android:layout_width="90dp" android:text="9" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnDivide" android:layout_height="90dp" android:layout_width="90dp" android:text="/" android:textsize="30dp">
+        </button></linearlayout>
+
+        <linearlayout android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+
+            <button android:id="@+id/btnFour" android:layout_height="90dp" android:layout_marginleft="25dp" android:layout_width="90dp" android:text="4" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnFive" android:layout_height="90dp" android:layout_width="90dp" android:text="5" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnSix" android:layout_height="90dp" android:layout_width="90dp" android:text="6" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnMultiply" android:layout_height="90dp" android:layout_width="90dp" android:text="*" android:textsize="30dp">
+        </button></linearlayout>
+
+        <linearlayout android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+
+            <button android:id="@+id/btnOne" android:layout_height="90dp" android:layout_marginleft="25dp" android:layout_width="90dp" android:text="1" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnTwo" android:layout_height="90dp" android:layout_width="90dp" android:text="2" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnThree" android:layout_height="90dp" android:layout_width="90dp" android:text="3" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnSub" android:layout_height="90dp" android:layout_width="90dp" android:text="-" android:textsize="30dp">
+        </button></linearlayout>
+
+        <linearlayout android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+
+            <button android:id="@+id/btnZero" android:layout_height="90dp" android:layout_marginleft="25dp" android:layout_width="90dp" android:text="0" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnDot" android:layout_height="90dp" android:layout_width="90dp" android:text="." android:textsize="30dp">
+
+            </button><button android:id="@+id/btnEqual" android:layout_height="90dp" android:layout_width="90dp" android:text="=" android:textsize="30dp">
+
+            </button><button android:id="@+id/btnAdd" android:layout_height="90dp" android:layout_width="90dp" android:text="+" android:textsize="30dp">
+        </button></linearlayout>
+
+        <linearlayout android:layout_height="wrap_content" android:layout_width="match_parent">
+
+            <button android:id="@+id/btnClear" android:layout_height="55dp" android:layout_marginleft="25dp" android:layout_marginright="25dp" android:layout_width="match_parent" android:text="C" android:textsize="22sp">
+        </button></linearlayout>
+    </linearlayout>
+</textview></relativelayout>
+
+
+Java code:-
+package com.example.mycalculator;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import java.text.DecimalFormat;
+
+
+
+
+
+public class MainActivity extends AppCompatActivity {
+    private double num1, num2, answer;
+    private char op;
+    private boolean hasDot; // Variable to know whether Dot(.) is pressed.
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        final Button btnOne = (Button) findViewById(R.id.btnOne);
+        final Button btnTwo = (Button) findViewById(R.id.btnTwo);
+        final Button btnThree = (Button) findViewById(R.id.btnThree);
+        final Button btnFour = (Button) findViewById(R.id.btnFour);
+        final Button btnFive = (Button) findViewById(R.id.btnFive);
+        final Button btnSix = (Button) findViewById(R.id.btnSix);
+        final Button btnSeven = (Button) findViewById(R.id.btnSeven);
+        final Button btnEight = (Button) findViewById(R.id.btnEight);
+        final Button btnNine = (Button) findViewById(R.id.btnNine);
+        final Button btnZero = (Button) findViewById(R.id.btnZero);
+        final Button btnAdd = (Button) findViewById(R.id.btnAdd);
+        final Button btnSub = (Button) findViewById(R.id.btnSub);
+        final Button btnMultiply = (Button) findViewById(R.id.btnMultiply);
+        final Button btnDivide = (Button) findViewById(R.id.btnDivide);
+        final Button btnDot = (Button) findViewById(R.id.btnDot);
+        final Button btnEqual = (Button) findViewById(R.id.btnEqual);
+        final Button btnClear = (Button) findViewById(R.id.btnClear);
+        final TextView txtDisplay = (TextView) findViewById(R.id.txtDisplay);
+
+        btnOne.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("1");
+            }
+        });
+
+        btnTwo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("2");
+            }
+        });
+
+        btnThree.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("3");
+            }
+        });
+
+        btnFour.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("4");
+            }
+        });
+
+        btnFive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("5");
+            }
+        });
+
+        btnSix.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("6");
+            }
+        });
+
+        btnSeven.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("7");
+            }
+        });
+
+        btnEight.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("8");
+            }
+        });
+
+        btnNine.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("9");
+            }
+        });
+
+        btnZero.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.append("0");
+            }
+        });
+
+        btnDot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // If Dot(.) is pressed then set hasDot to true to restrict
+                if (hasDot == false) {
+                    txtDisplay.append(".");
+                    hasDot = true;
+                }
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                num1 = Double.parseDouble(txtDisplay.getText().toString());
+                op = '+';
+                txtDisplay.setText("");
+                hasDot = false; // Set hasDot to false to use in the next operand.
+            }
+        });
+
+        btnSub.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                num1 = Double.parseDouble(txtDisplay.getText().toString());
+                op = '-';
+                txtDisplay.setText("");
+                hasDot = false; // Set hasDot to false to use in the next operand.
+            }
+        });
+
+        btnMultiply.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                num1 = Double.parseDouble(txtDisplay.getText().toString());
+                op = '*';
+                txtDisplay.setText("");
+                hasDot = false; // Set hasDot to false to use in the next operand.
+            }
+        });
+
+        btnDivide.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                num1 = Double.parseDouble(txtDisplay.getText().toString());
+                op = '/';
+                txtDisplay.setText("");
+                hasDot = false; // Set hasDot to false to use in the next operand.
+            }
+        });
+
+        btnEqual.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                num2 = Double.parseDouble(txtDisplay.getText().toString());
+                switch (op) {
+                    case '+':
+                        answer = num1 + num2;
+                        break;
+                    case '-':
+                        answer = num1 - num2;
+                        break;
+                    case '*':
+                        answer = num1 * num2;
+                        break;
+                    case '/':
+                        answer = num1 / num2;
+                        break;
+                    default:
+                        break;
+                }
+                DecimalFormat d = new DecimalFormat();
+                String ans = d.format(answer);
+                txtDisplay.setText(ans);
+                hasDot = false; // Set hasDot to false to use in new calculation.
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                txtDisplay.setText("");
+                hasDot = false; // Set hasDot to false to use in new calculation.
+            }
+        });
+    }
+}
+
+
+Create and Android app that demonstrate working with Textview Elements.
+xml code:-
+
+<relativelayout android:layout_height="match_parent" android:layout_width="match_parent" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <textview android:id="@+id/textView" android:layout_centerinparent="true" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Hello, TextView!" android:textsize="24sp">
+
+    <button android:id="@+id/buttonChangeText" android:layout_below="@id/textView" android:layout_centerhorizontal="true" android:layout_height="wrap_content" android:layout_margintop="16dp" android:layout_width="wrap_content" android:text="Change Text">
+
+    </button><button android:id="@+id/buttonResetText" android:layout_below="@id/buttonChangeText" android:layout_centerhorizontal="true" android:layout_height="wrap_content" android:layout_margintop="16dp" android:layout_width="wrap_content" android:text="Reset Text">
+
+</button></textview></relativelayout>
+
+
+Java code:-
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView textView;
+    private Button buttonChangeText;
+    private Button buttonResetText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize TextView and Buttons
+        textView = findViewById(R.id.textView);
+        buttonChangeText = findViewById(R.id.buttonChangeText);
+        buttonResetText = findViewById(R.id.buttonResetText);
+
+        // Set onClickListener for the Change Text Button
+        buttonChangeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Change the text of the TextView
+                textView.setText("Text changed!");
+            }
+        });
+
+        // Set onClickListener for the Reset Text Button
+        buttonResetText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reset the text of the TextView
+                textView.setText("Hello, TextView!");
+            }
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Create an Android app that demonstrates the use of TableLayout and Its attribute
+code xml
+<!--activity_main.xml-->
+
+<relativelayout android:layout_height="match_parent" android:layout_width="match_parent" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <tablelayout android:id="@+id/tableLayout" android:layout_height="wrap_content" android:layout_width="match_parent" android:padding="16dp" android:stretchcolumns="*">
+
+        <!--Table Header-->
+        <tablerow>
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="ID" android:textstyle="bold">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="Name" android:textstyle="bold">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="Age" android:textstyle="bold">
+        </textview></textview></textview></tablerow>
+
+        <!--Table Rows-->
+        <tablerow>
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="1">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="John">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="25">
+        </textview></textview></textview></tablerow>
+
+        <tablerow>
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="2">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="Alice">
+            <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="8dp" android:text="30">
+        </textview></textview></textview></tablerow>
+
+    </tablelayout>
+
+</relativelayout>
+
+// MainActivity.kt
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+Create an Android app that demonstrate the Date and Time Pickers
+Code: java
+package com.example.datetimepicker;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button btnDatePicker, btnTimePicker;
+    EditText txtDate, txtTime;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnDatePicker = findViewById(R.id.date_button);
+        btnTimePicker = findViewById(R.id.time_button);
+        txtDate = findViewById(R.id.date_ed);
+        txtTime = findViewById(R.id.time_ed);
+
+        btnDatePicker.setOnClickListener(this);
+        btnTimePicker.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btnDatePicker) {
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -&gt; {
+                txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            }, mYear, mMonth, mDay);
+            datePickerDialog.show();
+            Toast.makeText(getApplicationContext(), "Date is selected", Toast.LENGTH_LONG).show();
+        }
+
+        if (v == btnTimePicker) {
+            final Calendar c = Calendar.getInstance();
+            mHour = c.get(Calendar.HOUR_OF_DAY);
+            mMinute = c.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -&gt; {
+                txtTime.setText(hourOfDay + ":" + minute);
+            }, mHour, mMinute, false);
+            timePickerDialog.show();
+            Toast.makeText(getApplicationContext(), "Time is selected", Toast.LENGTH_LONG).show();
+        }
+    }
+}
+
+
+xml Code:-
+
+<relativelayout android:layout_height="wrap_content" android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <edittext android:hint="Select Date" android:id="@+id/date_ed" android:layout_height="wrap_content" android:layout_margintop="80dp" android:layout_width="match_parent" android:textalignment="center" android:textsize="20sp">
+
+    <button android:id="@+id/date_button" android:layout_below="@id/date_ed" android:layout_height="wrap_content" android:layout_margintop="9dp" android:layout_width="match_parent" android:text="Select Date">
+
+    <edittext android:hint="Select Time" android:id="@+id/time_ed" android:layout_below="@id/date_button" android:layout_height="wrap_content" android:layout_margintop="9dp" android:layout_width="match_parent" android:textalignment="center" android:textsize="20sp">
+
+    </edittext></button><button android:id="@+id/time_button" android:layout_below="@id/time_ed" android:layout_height="wrap_content" android:layout_margintop="9dp" android:layout_width="match_parent" android:text="Select Time">
+</button></edittext></relativelayout>
+
+
+Create an android app that demonstrate activity Lifecylce and INstance state
+code:-
+java
+package com.example.activitylifecyclestates;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Log.i("Lifecycle", "onCreate invoked ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("Lifecycle","onStart invoked");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Lifecycle","onResume invoked");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Lifecycle","onPause invoked");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("Lifecycle","onStop invoked");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("Lifecycle","onRestart invoked");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("Lifecycle","onDestroy invoked");
+    }
+}
+
+
+
+
+
+Create an android app that demonstrate the use of Keyboards, Input Controls, Alerts and Pickers.
+xml code:-
+<linearlayout android:layout_height="match_parent" android:layout_width="match_parent" android:orientation="vertical" android:padding="16dp" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <edittext android:hint="Enter something" android:id="@+id/editText" android:layout_height="wrap_content" android:layout_width="match_parent">
+
+    <button android:id="@+id/alertButton" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Show Alert">
+
+    </button><button android:id="@+id/datePickerButton" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Pick Date">
+
+</button></edittext></linearlayout>
+
+Java Code:-
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText editText;
+    Button alertButton, datePickerButton;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editText = findViewById(R.id.editText);
+        alertButton = findViewById(R.id.alertButton);
+        datePickerButton = findViewById(R.id.datePickerButton);
+
+        alertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert();
+            }
+        });
+
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker();
+            }
+        });
+    }
+
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This is an alert dialog")
+                .setTitle("Alert")
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    private void showDatePicker() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                        Toast.makeText(MainActivity.this, "Selected Date: " + date, Toast.LENGTH_SHORT).show();
+                    }
+                }, year, month, day);
+        datePickerDialog.show();
+    }
+}
+
+
+Create an android app that demonstrate the option menu
+xml code:-
+
+<androidx .constraintlayout.widget.constraintlayout="" android:layout_height="match_parent" android:layout_width="match_parent" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+    <textview android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Hello World!" app:layout_constraintbottom_tobottomof="parent" app:layout_constraintend_toendof="parent" app:layout_constraintstart_tostartof="parent" app:layout_constrainttop_totopof="parent">
+
+</textview></androidx>
+
+
+java code:-
+package com.example.menu0;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import  android.widget.Toast;
+
+import android.os.Bundle;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.example_menu,menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        int i = item.getItemId();
+        if(i==R.id.f1)
+        {
+            Toast.makeText(getApplicationContext(),"File 1 is selected",Toast.LENGTH_LONG).show();
+        }
+        else if(i==R.id.f2)
+        {
+            Toast.makeText(getApplicationContext(),"File 2 is selected",Toast.LENGTH_LONG).show();
+        }
+        else if(i==R.id.f3)
+        {
+            Toast.makeText(getApplicationContext(),"File 3 is selected",Toast.LENGTH_LONG).show();
+        }
+        return true;
+    }
+}
